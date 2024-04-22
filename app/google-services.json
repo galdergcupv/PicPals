@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "573559253368",
+    "project_id": "picpals-879ba",
+    "storage_bucket": "picpals-879ba.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:573559253368:android:01dff01ebc49b6104b808d",
+        "android_client_info": {
+          "package_name": "com.example.picpals"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUjeu2j6smiVvLAnPfivEdOPdiwHzOyWw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

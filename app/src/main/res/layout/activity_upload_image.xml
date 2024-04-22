@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/placeholder_image"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp" />
+
+    <EditText
+        android:id="@+id/editTextName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nombre de la imagen"
+        android:layout_below="@id/imageView"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp" />
+
+    <EditText
+        android:id="@+id/editTextShareWith"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Usuarios a compartir (separados por comas)"
+        android:layout_below="@id/editTextName"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp" />
+
+    <Button
+        android:id="@+id/btnUpload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Subir imagen"
+        android:layout_below="@id/editTextShareWith"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="16dp"
+        android:onClick="uploadImage" />
+
+</RelativeLayout>
