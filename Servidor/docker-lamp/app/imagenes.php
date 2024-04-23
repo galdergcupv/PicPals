@@ -10,7 +10,7 @@ if ($conn->connect_error) {
     die("Database connection failed: " . $conn->connect_error);
 }
 
-// Función para escapar caracteres especiales en una cadena (para evitar inyecciones SQL)
+// Función para escapar caracteres especiales (para evitar inyecciones SQL)
 function cleanInput($input) {
     global $conn;
     return mysqli_real_escape_string($conn, htmlspecialchars(strip_tags(trim($input))));
@@ -45,7 +45,7 @@ function saveImage($filename, $uploaderName, $imageBase64, $shareWith) {
                     $userData = mysqli_fetch_assoc($userQuery);
                     $fcmToken = $userData['fcm_token'];
                     
-                    // Enviar notificaciones al usuario
+                    // Enviar notificaciones fcm al usuario
                     $message = "$uploaderName ha compartido una foto contigo!";
                     sendNotification($fcmToken, $message);
     
@@ -104,15 +104,14 @@ function getSharedImages($username) {
     }
 }
 
-// Function to send a Firebase notification to a user
+// Función para enviar una notificación fcm al usuario
 function sendNotification($fcmToken, $message) {
-    // FCM endpoint
     $url = 'https://fcm.googleapis.com/fcm/send';
 
-    // FCM server key
+    // Key del servidor fcm
     $serverKey = 'AAAAhYrLqXg:APA91bF9DSIUYzPVgf5Q01fVHK3MEedUEJ4FKk1_glDjI2NO389p6xwuwCbFZJz9iOzQN4KW-fj4quLugtWixsvU4nFlrY7xF2L7_ZYFed_DHR26W48MKqnxSMRCUl3_ztX0qBT06rm5';
 
-    // Message data
+    // Datos del mensaje
     $data = [
         'to' => $fcmToken,
         'notification' => [
@@ -121,38 +120,35 @@ function sendNotification($fcmToken, $message) {
         ]
     ];
 
-    // HTTP headers
+    // Cabeceras HTTP
     $headers = [
         'Authorization: key=' . $serverKey,
         'Content-Type: application/json'
     ];
 
-    // Initialize cURL session
+    // cURL
     $curl = curl_init();
 
-    // Set cURL options
     curl_setopt($curl, CURLOPT_URL, $url);
     curl_setopt($curl, CURLOPT_POST, true);
     curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false); // Ignore SSL certificate verification
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
     curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
 
-    // Execute cURL request
     $response = curl_exec($curl);
 
-    // Log request data
+    // Añadir logs para ver los datos
     error_log("FCM Request Data: " . json_encode($data));
 
     if ($response === false) {
-        // Log error if cURL request fails
+        // Añadir logs para ver errores de curl
         error_log("FCM Error: " . curl_error($curl));
     } else {
-        // Log response from FCM server
+        // Añadir logs para ver la respuesta
         error_log("FCM Response: " . $response);
     }
 
-    // Close cURL session
     curl_close($curl);
 
     return $response;
@@ -191,7 +187,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
                 break;
             case 'get_user_images':
-                // Verificar si se recibió el nombre del usuario
                 if (isset($data['username'])) { 
                     $username = $data['username']; 
                     echo json_encode(getUserImages($username)); 
@@ -201,7 +196,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 break;
             
             case 'get_shared_images':
-                // Verificar si se recibió el nombre del usuario
                 if (isset($data['username'])) { 
                 $username = $data['username']; 
                 echo json_encode(getSharedImages($username)); 
@@ -213,11 +207,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 echo "Acción no válida";
         }
     } else {
-        // Acción no especificada
         echo "Acción no especificada";
     }
 } else {
-    // Método de solicitud no permitido
     echo "Método de solicitud no permitido";
 }
 

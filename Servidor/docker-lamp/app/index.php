@@ -10,13 +10,13 @@ if ($conn->connect_error) {
     die("Database connection failed: " . $conn->connect_error);
 }
 
-// Función para escapar caracteres especiales en una cadena (para evitar inyecciones SQL)
+// Función para escapar caracteres especiales (para evitar inyecciones SQL)
 function cleanInput($input) {
     global $conn;
     return mysqli_real_escape_string($conn, htmlspecialchars(strip_tags(trim($input))));
 }
 
-// Función para generar un hash seguro de la contraseña
+// Función para generar un hash para la contraseña
 function hashPassword($password) {
     // Generar un salt aleatorio
     $salt = bin2hex(random_bytes(32));
@@ -29,7 +29,7 @@ function hashPassword($password) {
 function verifyPassword($password, $storedHash, $storedSalt) {
     // Generar el hash de la contraseña ingresada con el salt almacenado
     $hashedPassword = hash('sha256', $password . $storedSalt);
-    // Comparar el hash generado con el hash almacenado
+    
     return $hashedPassword === $storedHash;
 }
 
@@ -46,7 +46,7 @@ function registerUser($username, $password) {
         return "El usuario ya existe";
     }
 
-    // Generar el hash de la contraseña y obtener el salt
+    // Generar el hash de la contraseña y obtener la salt
     $passwordData = hashPassword($password);
     $hashedPassword = $passwordData['hash'];
     $salt = $passwordData['salt'];
@@ -60,14 +60,14 @@ function registerUser($username, $password) {
     }
 }
 
-// Función para iniciar sesión de usuario
+// Función para iniciar sesión
 function loginUser($username, $password, $fcm_token) {
     global $conn;
 
     // Escapar caracteres especiales
     $username = cleanInput($username);
 
-    // Obtener el hash de la contraseña almacenada y el salt asociado al usuario
+    // Obtener el hash de la contraseña almacenada y la salt asociada al usuario
     $query = mysqli_query($conn, "SELECT hash, salt FROM usuarios WHERE nombre='$username'");
     if (mysqli_num_rows($query) == 1) {
         $row = mysqli_fetch_assoc($query);
@@ -92,7 +92,7 @@ function loginUser($username, $password, $fcm_token) {
     }
 }
 
-// Función para cerrar sesión de usuario
+// Función para cerrar sesión
 function logoutUser($username) {
     global $conn;
 
@@ -148,18 +148,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 echo logoutUser($username);
             }
             else{
-                // Datos incompletos en la solicitud
                 echo "Datos incompletos en la solicitud";
             }
             
         }
         else{
-            // Datos incompletos en la solicitud
             echo "Datos incompletos en la solicitud";
         }
     }
 } else {
-    // Método de solicitud no permitido
     echo "Método de solicitud no permitido";
 }
 
