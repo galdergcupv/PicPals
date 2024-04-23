@@ -26,6 +26,9 @@ public class LoginActivity extends AppCompatActivity {
     private EditText editTextUsername;
     private EditText editTextPassword;
 
+    // Atributos para guardar el estado
+    private String username;
+    private String password;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +36,22 @@ public class LoginActivity extends AppCompatActivity {
 
         editTextUsername = findViewById(R.id.editTextUsername);
         editTextPassword = findViewById(R.id.editTextPassword);
+
+        // Recuperar el estado si existe
+        if (savedInstanceState != null) {
+            username = savedInstanceState.getString("username");
+            password = savedInstanceState.getString("password");
+            editTextUsername.setText(username);
+            editTextPassword.setText(password);
+        }
+    }
+
+    // Guardar el estado
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("username", editTextUsername.getText().toString());
+        outState.putString("password", editTextPassword.getText().toString());
     }
 
     public void login(View view) {

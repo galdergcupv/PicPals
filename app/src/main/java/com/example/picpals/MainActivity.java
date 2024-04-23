@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
@@ -54,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int READ_EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE = 200;
 
+    private ImageView imageView;
+
 
 
     @Override
@@ -72,6 +75,18 @@ public class MainActivity extends AppCompatActivity {
         btnChoosePhoto = findViewById(R.id.btnChoosePhoto);
         btnViewUploadedPhotos = findViewById(R.id.btnViewPhotos);
         btnViewSharedPhotos = findViewById(R.id.btnViewSharedPhotos);
+
+        imageView = findViewById(R.id.imageView2);
+
+        // Verifica la orientación actual del dispositivo
+        int orientation = getResources().getConfiguration().orientation;
+
+        // Si la orientación es horizontal, oculta el ImageView
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            imageView.setVisibility(View.GONE);
+        } else {
+            imageView.setVisibility(View.VISIBLE);
+        }
 
         checkSession();
 

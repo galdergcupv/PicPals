@@ -3,6 +3,7 @@ package com.example.picpals;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -32,7 +33,14 @@ public class UploadImageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_upload_image);
+        // Verifica la orientación actual del dispositivo
+        int orientation = getResources().getConfiguration().orientation;
+        // Carga el diseño correspondiente
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            setContentView(R.layout.activity_upload_image_landscape);
+        } else {
+            setContentView(R.layout.activity_upload_image);
+        }
 
         imageView = findViewById(R.id.imageView);
         editTextImageName = findViewById(R.id.editTextName);
@@ -47,6 +55,9 @@ public class UploadImageActivity extends AppCompatActivity {
 
         // Mostrar la imagen en imageView
         imageView.setImageBitmap(imageBitmap);
+
+
+
     }
 
     public void uploadImage(View view) {

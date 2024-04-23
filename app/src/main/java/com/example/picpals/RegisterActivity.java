@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -19,6 +20,9 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText editTextNewUsername;
     private EditText editTextNewPassword;
 
+    // Atributos para guardar el estado
+    private String username;
+    private String password;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,8 +30,23 @@ public class RegisterActivity extends AppCompatActivity {
 
         editTextNewUsername = findViewById(R.id.editTextNewUsername);
         editTextNewPassword = findViewById(R.id.editTextNewPassword);
+
+        // Recuperar el estado si existe
+        if (savedInstanceState != null) {
+            username = savedInstanceState.getString("username");
+            password = savedInstanceState.getString("password");
+            editTextNewUsername.setText(username);
+            editTextNewPassword.setText(password);
+        }
     }
 
+    // Guardar el estado
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("username", editTextNewUsername.getText().toString());
+        outState.putString("password", editTextNewPassword.getText().toString());
+    }
     public void register(View view) {
         String username = editTextNewUsername.getText().toString().trim();
         String password = editTextNewPassword.getText().toString().trim();
