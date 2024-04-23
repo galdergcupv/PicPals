@@ -1,6 +1,8 @@
 package com.example.picpals;
 
 import android.app.AlertDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -47,13 +50,10 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_IMAGE_PICK = 2;
 
-    private ImageView imageView;
-
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 100;
 
     private static final int READ_EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE = 200;
 
-    private String fcm_token;
 
 
     @Override
@@ -68,7 +68,6 @@ public class MainActivity extends AppCompatActivity {
         btnLogout = findViewById(R.id.btnLogout);
         tvUsername = findViewById(R.id.tvUsername);
 
-        // Nuevos botones
         btnTakePhoto = findViewById(R.id.btnTakePhoto);
         btnChoosePhoto = findViewById(R.id.btnChoosePhoto);
         btnViewUploadedPhotos = findViewById(R.id.btnViewPhotos);
@@ -100,6 +99,15 @@ public class MainActivity extends AppCompatActivity {
                         String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 11);
             }
         }
+
+        // Crear canal por defecto si la versión es OREO o superior
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("canal por defecto", "canal por defecto", NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setDescription("canal por defecto");
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(new OnCompleteListener<String>() {
                     @Override
@@ -113,6 +121,8 @@ public class MainActivity extends AppCompatActivity {
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putString("fcm_token", token);
                         editor.apply();
+                        Log.d("MainActivity", "Token firebase: " + token);
+
                     }
                 });
     }
@@ -311,6 +321,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // Método para reescalar la imagen
     private Bitmap resizeImage(Bitmap image, int maxWidth, int maxHeight) {
         int width = image.getWidth();
         int height = image.getHeight();
@@ -329,6 +340,7 @@ public class MainActivity extends AppCompatActivity {
         return Bitmap.createScaledBitmap(image, finalWidth, finalHeight, true);
     }
 
+    // Método para eliminar el token FCM del usuario en la base de datos
     private void removeFCMToken(String username){
         Data inputData = new Data.Builder()
                 .putString("action", "logout")
@@ -351,7 +363,7 @@ public class MainActivity extends AppCompatActivity {
                             Data outputData = workInfo.getOutputData();
                             String result = outputData.getString("result");
 
-                            // Mostrar el resultado del inicio del logout
+                            // Mostrar el resultado del logout
                             Toast.makeText(MainActivity.this, result, Toast.LENGTH_SHORT).show();
 
                         }

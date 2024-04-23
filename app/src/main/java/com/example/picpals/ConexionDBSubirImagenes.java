@@ -28,7 +28,7 @@ public class ConexionDBSubirImagenes extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        // Obtener los datos de la imagen del WorkerParameters
+        // Obtener los datos de la imagen
         Data inputData = getInputData();
         String action = inputData.getString("action");
         String filename = inputData.getString("filename");
@@ -37,8 +37,8 @@ public class ConexionDBSubirImagenes extends Worker {
         String shareWith = inputData.getString("shareWith");
 
 
-        // URL del archivo PHP en tu servidor que maneja las imágenes
-        String url = "http://34.29.139.252:81/imagenes.php"; // Reemplaza con la URL correcta de tu servidor y el archivo PHP
+        // URL del servidor
+        String url = "http://34.29.139.252:81/imagenes.php";
 
         try {
             // Establecer la conexión
@@ -49,7 +49,7 @@ public class ConexionDBSubirImagenes extends Worker {
 
             // Construir el cuerpo de la solicitud
             JSONObject jsonParam = new JSONObject();
-            jsonParam.put("action", action); // Aquí se cambia el valor de "action" según el tipo de solicitud
+            jsonParam.put("action", action); // Se cambia el valor de "action" según el tipo de solicitud
             jsonParam.put("filename", filename);
             jsonParam.put("uploaderName", uploaderName);
             jsonParam.put("shareWith", shareWith);
@@ -63,7 +63,7 @@ public class ConexionDBSubirImagenes extends Worker {
             os.flush();
             os.close();
 
-            // Registrar la solicitud enviada al servidor
+            // Añadir logs para ver la solicitud enviada al servidor
             Log.d("ConexionDBimagenes", "Solicitud enviada al servidor:");
             Log.d("ConexionDBimagenes", "URL: " + url);
             Log.d("ConexionDBimagenes", "Método: " + conn.getRequestMethod());
@@ -80,7 +80,7 @@ public class ConexionDBSubirImagenes extends Worker {
             reader.close();
             inputStream.close();
 
-            // Procesar la respuesta del servidor
+            // Añadir logs para ver la respuesta del servidor
             String result = response.toString();
             Log.d("ConexionDBimagenes", "Respuesta del servidor: " + result);
 

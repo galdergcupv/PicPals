@@ -36,43 +36,39 @@ public class ViewUploadedPhotosActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Fetch images from the server
         fetchImagesFromServer();
     }
 
+    // Método para obtener las imágenes del servidor
     private void fetchImagesFromServer() {
 
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         String username = sharedPreferences.getString("username", "");
 
-        // Create a Data object with action and username
         Data inputData = new Data.Builder()
                 .putString("action", "get_user_images")
-                .putString("username", username) // You need to implement this method to get the username from SharedPreferences
+                .putString("username", username)
                 .build();
 
-        // Create a OneTimeWorkRequest for ConexionDBBajarImagenes
         OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(ConexionDBBajarImagenes.class)
                 .setInputData(inputData)
                 .build();
 
-        // Enqueue the work request
         WorkManager.getInstance(this).enqueue(workRequest);
 
-        // Observe the result
         WorkManager.getInstance(this).getWorkInfoByIdLiveData(workRequest.getId())
                 .observe(this, workInfo -> {
                     if (workInfo != null && workInfo.getState().isFinished()) {
-                        // Get the result from the worker
+
                         Data outputData = workInfo.getOutputData();
                         String result = outputData.getString("result");
 
-                        // Process the result and update the adapter
                         processResultAndUpdateAdapter(result);
                     }
                 });
     }
 
+    // Método para procesar las imágenes del resultado y actualizar el adapter
     private void processResultAndUpdateAdapter(String result) {
         if (result != null) {
             if (result.equals("\"No se encontraron imagenes para este usuario\"")) {

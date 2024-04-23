@@ -28,15 +28,15 @@ public class ConexionDBUsuarios extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        // Obtener los datos del usuario del WorkerParameters
+        // Obtener los datos del usuario
         Data inputData = getInputData();
         String action = inputData.getString("action");
         String username = inputData.getString("username");
         String password = inputData.getString("password");
         String fcm_token = inputData.getString("fcm_token");
 
-        // URL del archivo PHP en tu servidor que maneja el registro de usuarios y el inicio de sesión
-        String url = "http://34.29.139.252:81"; // Reemplaza con la URL correcta de tu servidor y el archivo PHP
+        // URL del servidor
+        String url = "http://34.29.139.252:81";
 
         try {
             // Establecer la conexión
@@ -47,7 +47,7 @@ public class ConexionDBUsuarios extends Worker {
 
             // Construir el cuerpo de la solicitud
             JSONObject jsonParam = new JSONObject();
-            jsonParam.put("action", action); // Aquí se cambia el valor de "action" según el tipo de solicitud
+            jsonParam.put("action", action); // Se cambia el valor de "action" según el tipo de solicitud
             jsonParam.put("username", username);
             jsonParam.put("password", password);
             jsonParam.put("fcm_token", fcm_token);
@@ -58,7 +58,7 @@ public class ConexionDBUsuarios extends Worker {
             os.flush();
             os.close();
 
-            // Registrar la solicitud enviada al servidor
+            // Añadir logs para ver la solicitud enviada al servidor
             Log.d("ConexionDB", "Solicitud enviada al servidor:");
             Log.d("ConexionDB", "URL: " + url);
             Log.d("ConexionDB", "Método: " + conn.getRequestMethod());
@@ -75,7 +75,7 @@ public class ConexionDBUsuarios extends Worker {
             reader.close();
             inputStream.close();
 
-            // Procesar la respuesta del servidor
+            // Añadir logs para ver la respuesta del servidor
             String result = response.toString();
             Log.d("ConexionDB", "Respuesta del servidor: " + result);
 

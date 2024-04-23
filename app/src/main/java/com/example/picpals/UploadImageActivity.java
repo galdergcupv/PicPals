@@ -67,7 +67,7 @@ public class UploadImageActivity extends AppCompatActivity {
 
 
 
-        // Obtener el nombre de usuario de las preferencias compartidas
+        // Obtener el nombre de usuario de las preferencias
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         String username = sharedPreferences.getString("username", "");
 
@@ -103,9 +103,9 @@ public class UploadImageActivity extends AppCompatActivity {
 
                             // Si la carga de la imagen es exitosa, cierra la actividad y vuelve a la actividad principal
                             if (result.equals("Imagen guardada con éxito")) {
-                                finish(); // Cierra la actividad actual
+                                finish();
                                 Intent intent = new Intent(UploadImageActivity.this, MainActivity.class);
-                                startActivity(intent); // Vuelve a la actividad principal
+                                startActivity(intent);
                             }
                         }
                     }

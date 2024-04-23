@@ -28,12 +28,12 @@ public class ConexionDBBajarImagenes extends Worker {
     @Override
     @NonNull
     public Result doWork() {
-        // Obtener los datos de la imagen del WorkerParameters
+        // Obtener los datos del usuario
         Data inputData = getInputData();
         String action = inputData.getString("action");
-        String username = inputData.getString("username"); // Get the username from input data
+        String username = inputData.getString("username");
 
-        // URL del archivo PHP en tu servidor que maneja las imágenes
+        // URL del servidor
         String url = "http://34.29.139.252:81/imagenes.php";
 
         try {
@@ -45,8 +45,8 @@ public class ConexionDBBajarImagenes extends Worker {
 
             // Construir el cuerpo de la solicitud
             JSONObject jsonParam = new JSONObject();
-            jsonParam.put("action", action);
-            jsonParam.put("username", username); // Add the username to fetch images for this user
+            jsonParam.put("action", action); // Se cambia el valor de "action" según el tipo de solicitud
+            jsonParam.put("username", username);
 
             // Escribir los datos en la solicitud
             OutputStream os = conn.getOutputStream();
@@ -54,7 +54,7 @@ public class ConexionDBBajarImagenes extends Worker {
             os.flush();
             os.close();
 
-            // Registrar la solicitud enviada al servidor
+            // Añadir logs para ver la solicitud enviada al servidor
             Log.d("ConexionDBimagenes", "Solicitud enviada al servidor:");
             Log.d("ConexionDBimagenes", "URL: " + url);
             Log.d("ConexionDBimagenes", "Método: " + conn.getRequestMethod());
@@ -71,7 +71,7 @@ public class ConexionDBBajarImagenes extends Worker {
             reader.close();
             inputStream.close();
 
-            // Procesar la respuesta del servidor
+            // Añadir logs para ver la respuesta del servidor
             String result = response.toString();
             Log.d("ConexionDBImagenes", "Respuesta del servidor: " + result);
 

@@ -75,9 +75,9 @@ public class LoginActivity extends AppCompatActivity {
                                 editor.apply();
 
                                 // Cerrar la actividad actual y volver a la actividad principal
-                                finish(); // Cerrar la actividad actual
+                                finish();
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                startActivity(intent); // Ir a la actividad principal
+                                startActivity(intent);
                             }
                         }
                     }

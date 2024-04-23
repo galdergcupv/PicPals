@@ -59,9 +59,9 @@ public class RegisterActivity extends AppCompatActivity {
 
                             // Si el registro es exitoso, cerrar la actividad y volver a la actividad principal
                             if (result.equals("Registro exitoso")) {
-                                finish(); // Cerrar la actividad actual
+                                finish();
                                 Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-                                startActivity(intent); // Ir a la actividad principal
+                                startActivity(intent);
                             }
                         }
                     }

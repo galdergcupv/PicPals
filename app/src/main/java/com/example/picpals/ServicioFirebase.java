@@ -21,12 +21,14 @@ public class ServicioFirebase extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
+
+        // Enviar notificación al recivir el mensaje FCM
         String messageBody = remoteMessage.getNotification().getBody();
         Log.d("ServicioFirebase", "Message Notification Body: " + messageBody);
 
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 , intent,
                 PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -44,8 +46,7 @@ public class ServicioFirebase extends FirebaseMessagingService {
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-        // Since android Oreo notification channel is needed.
-        // Check if SDK version is greater than or equal to Oreo
+        // Si es android 8 o superior hay que usar un canal de notificaciones
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel("default",
                     "Channel human readable title",
@@ -53,7 +54,7 @@ public class ServicioFirebase extends FirebaseMessagingService {
             notificationManager.createNotificationChannel(channel);
         }
 
-        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+        notificationManager.notify(0, notificationBuilder.build());
     }
 
 
@@ -61,11 +62,14 @@ public class ServicioFirebase extends FirebaseMessagingService {
     public void onNewToken(String token) {
         super.onNewToken(token);
 
-        // Store the token in SharedPreferences
+        Log.d("ServicioFirebase", "Nuevo token: " + token);
+
+        // Guarda el nuevo token en las preferencias
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("fcm_token", token);
         editor.apply();
+
     }
 
 }
