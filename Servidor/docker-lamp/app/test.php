@@ -21,13 +21,13 @@
 <div id="response">
     <?php
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        // Retrieve form data
+        // Leer los datos
         $uploaderName = $_POST['uploaderName'];
         $shareWith = $_POST['shareWith'];
         $filename = $_POST['filename'];
         $imageBase64 = $_POST['imageBase64'];
 
-        // Define your JSON payload
+        // Generar la información del JSON
         $data = array(
             "action" => "save_image",
             "filename" => $filename,
@@ -36,31 +36,27 @@
             "imageBase64" => $imageBase64
         );
 
-        // Convert the data to JSON format
+        // Convertir a formato JSON
         $json_data = json_encode($data);
 
-        // Set the URL for your server
+        // URL del servidor
         $url = 'http://34.29.139.252:81/imagenes.php';
 
-        // Initialize cURL session
+        // cURL
         $ch = curl_init();
 
-        // Set cURL options
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $json_data);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-        // Execute the request
         $response = curl_exec($ch);
 
-        // Check for errors
         if (curl_errno($ch)) {
             echo 'Error: ' . curl_error($ch);
         }
 
-        // Close cURL session
         curl_close($ch);
     }
     ?>
