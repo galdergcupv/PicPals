@@ -130,7 +130,7 @@
             android:layout_marginBottom="16dp"
             android:backgroundTint="@color/greenDark"
             android:onClick="viewSharedPhotosClicked"
-            android:text="Ver fotos compartidas"
+            android:text="Ver Fotos Compartidas"
             android:textColor="@color/black" />
 
     </LinearLayout>
